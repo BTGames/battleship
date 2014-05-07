@@ -10,21 +10,23 @@ import java.util.Random;
 public class AI {
 
 	private final int SIZE = 10;
-	private final int UNVISITED = 200;
-	private final int HIT = 300;
-	private final int SUNK = 400;
-	private final int EMPTY = 500;
-	private final int NOT_SUNK = 600;
+	private final int UNVISITED = 20;
+	private final int HIT = 30;
+	private final int SUNK = 40;
+	private final int EMPTY = 50;
+	private final int NOT_SUNK = 60;
 	private final int HORIZONTAL = 0;
 	private final int VERTICAL = 1;
 
 	private final int[] SHIP_LENGTHS = {2, 3, 3, 4, 5};
 	private final int[] SHIP_VALUES = {0, 1, 2, 3, 4};
 
-	private int[][] tracking;
-	private int[][] primary;
+	private int[][] tracking = new int[SIZE][SIZE];
+	private int[][] primary = new int[SIZE][SIZE];
 	private boolean[] sunk = {false, false, false, false, false};
 	private boolean mode;
+
+	private Random rand = new Random();
 
 	public AI() {
 		//Initial values
@@ -41,27 +43,27 @@ public class AI {
 
 		//Fill ships.
 
-		for (int i = 0; i < SHIP_LENGTHS.length; i++) {
-			boolean control;
-			int x, y, axis;
-			Random rand = new Random();
-			do {
-				x = rand.nextInt(SIZE);
-				y = rand.nextInt(SIZE);
-				axis = rand.nextInt(2);
-				control = isValidShip(x, y, SHIP_LENGTHS[i], axis);
-			} while (!control);
-
-			if (axis == HORIZONTAL) {
-				for (int j = 0; j < SHIP_LENGTHS[i]; j++) {
-					primary[x + j][y] = SHIP_VALUES[i];
-				}
-			} else {
-				for (int j = 0; j < SHIP_LENGTHS[i]; j++) {
-					primary[x][y + j] = SHIP_VALUES[i];
-				}
-			}
-		}
+//		for (int i = 0; i < SHIP_LENGTHS.length; i++) {
+//			boolean control;
+//			int x, y, axis;
+//
+//			do {
+//				x = rand.nextInt(SIZE);
+//				y = rand.nextInt(SIZE);
+//				axis = rand.nextInt(2);
+//				control = isValidShip(x, y, SHIP_LENGTHS[i], axis);
+//			} while (!control);
+//
+//			if (axis == HORIZONTAL) {
+//				for (int j = 0; j < SHIP_LENGTHS[i]; j++) {
+//					primary[x + j][y] = SHIP_VALUES[i];
+//				}
+//			} else {
+//				for (int j = 0; j < SHIP_LENGTHS[i]; j++) {
+//					primary[x][y + j] = SHIP_VALUES[i];
+//				}
+//			}
+//		}
 	}
 
 
