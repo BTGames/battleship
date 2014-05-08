@@ -6,12 +6,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
+
+	public int turn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,11 +24,16 @@ public class MainActivity extends ActionBarActivity {
 	    final int PLAYING = 100;
 	    final int PLAYER_WON = 101;
 	    final int PLAYER_LOST = 102;
-	    AI ai = new AI();
-	    Player player = new Player();
-	    TextView primary = (TextView) findViewById(R.id.primary);
-	    TextView tracking = (TextView) findViewById(R.id.tracking);
-	    int status;
+	    final int PLAYER = 998;
+	    final int AI = 999;
+	    final Player player = new Player();
+	    final AI ai = new AI(player);
+	    final TextView primary = (TextView) findViewById(R.id.primary);
+	    final TextView tracking = (TextView) findViewById(R.id.tracking);
+	    final TextView aifeedback = (TextView) findViewById(R.id.aifeedback);
+	    Button btn = (Button) findViewById(R.id.play);
+	    final EditText xCoord = (EditText) findViewById(R.id.xcoord);
+	    final EditText yCoord = (EditText) findViewById(R.id.ycoord);
 
 //	    GridView gridview = (GridView) findViewById(R.id.gridview);
 //	    gridview.setAdapter(new ImageAdapter(this));
@@ -35,22 +44,46 @@ public class MainActivity extends ActionBarActivity {
 //		    }
 //	    });
 
-	    player.show(primary, tracking);
+	    int status;
+	    turn = PLAYER;
+	    btn.setText("PLAY");
 
-//	    do {
-//		    player.show(primary, tracking);
-//
-//		    /*
-//		    Game status check.
-//		     */
-//			if(player.isVictorious()) {
-//				status = PLAYER_WON;
-//			} else if(ai.isVictorious()) {
-//				status = PLAYER_LOST;
-//			} else {
-//				status = PLAYING;
-//			}
-//	    } while (status != PLAYING);
+	    do {
+		    player.show(primary, tracking);
+			if (turn == PLAYER) {
+				btn.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						// Do something in response to button click
+						int x, y;
+						int[] res;
+						x = Integer.parseInt(xCoord.getText().toString());
+						y = Integer.parseInt(yCoord.getText().toString());
+						res = ai.hit(x, y);
+						aifeedback.setText(res[0] + " | " + res[1]);
+						player.setTracking(x, y, res[0]);
+						player.show(primary, tracking);
+						turn = AI;
+						if (turn == AI) {
+							ai.hunt(player,aifeedback);
+							player.show(primary, tracking);
+							turn = PLAYER;
+						}
+					}
+				});
+			}
+
+
+		    /*
+		    Game status check.
+		     */
+			if(player.isVictorious()) {
+				status = PLAYER_WON;
+			} else if(ai.isVictorious()) {
+				status = PLAYER_LOST;
+			} else {
+				status = PLAYING;
+			}
+	    } while (status != PLAYING);
 
     }
 
