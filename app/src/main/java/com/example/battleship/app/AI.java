@@ -137,17 +137,25 @@ public class AI {
 										/*
 										Horizontal
 										 */
-										probabilities[j][k+m]++;
+										probabilities[j][k+m] += 1;
 									} else {
 										/*
 										Vertical
 										 */
-										probabilities[j+m][k]++;
+										probabilities[j+m][k] += 1;
 									}
 								}
 							}
 						}
 					}
+				}
+			}
+		}
+
+		for (int i=0; i<SIZE; i++) {
+			for (int j=0; j<SIZE; j++) {
+				if ((tracking[i][j] == HIT) || (tracking[i][j] == EMPTY)) {
+					probabilities[i][j] = -1;
 				}
 			}
 		}
@@ -179,6 +187,7 @@ public class AI {
 					}
 				}
 			}
+
 		} else {
 			/*
 			There is no target.
@@ -332,6 +341,20 @@ public class AI {
 		for (boolean aSunk : sunk) {
 			if (!aSunk) {
 				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean isLoser() {
+		/*
+		Checks if LOSER.
+		 */
+		for (int i=0; i<SIZE; i++) {
+			for (int j=0; j<SIZE; j++) {
+				if (primary[i][j] < 5) {
+					return false;
+				}
 			}
 		}
 		return true;

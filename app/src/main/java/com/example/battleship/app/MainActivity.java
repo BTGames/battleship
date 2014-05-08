@@ -48,7 +48,7 @@ public class MainActivity extends ActionBarActivity {
 	    turn = PLAYER;
 	    btn.setText("PLAY");
 
-	    do {
+//	    do {
 		    player.show(primary, tracking);
 			if (turn == PLAYER) {
 				btn.setOnClickListener(new View.OnClickListener() {
@@ -59,8 +59,7 @@ public class MainActivity extends ActionBarActivity {
 						x = Integer.parseInt(xCoord.getText().toString());
 						y = Integer.parseInt(yCoord.getText().toString());
 						res = ai.hit(x, y);
-						aifeedback.setText(res[0] + " | " + res[1]);
-						player.setTracking(x, y, res[0]);
+						player.setTracking(x, y, res[0], res[1]);
 						player.show(primary, tracking);
 						turn = AI;
 						if (turn == AI) {
@@ -68,22 +67,20 @@ public class MainActivity extends ActionBarActivity {
 							player.show(primary, tracking);
 							turn = PLAYER;
 						}
+						if(ai.isLoser()) {
+							aifeedback.setText("Player won!");
+						} else if(ai.isVictorious()) {
+							aifeedback.setText("AI won!");
+						}
 					}
 				});
 			}
 
+//	    } while (status != PLAYING);
 
-		    /*
-		    Game status check.
-		     */
-			if(player.isVictorious()) {
-				status = PLAYER_WON;
-			} else if(ai.isVictorious()) {
-				status = PLAYER_LOST;
-			} else {
-				status = PLAYING;
-			}
-	    } while (status != PLAYING);
+	     /*
+         Game status printout.
+		 */
 
     }
 

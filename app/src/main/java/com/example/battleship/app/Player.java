@@ -216,8 +216,11 @@ public class Player {
 		return true;
 	}
 
-	public void setTracking(int x, int y, int val) {
-		tracking[x][y] = val;
+	public void setTracking(int x, int y, int val, int ship) {
+
+		if (tracking[x][y] != 7) {
+			tracking[x][y] = val;
+		}
 	}
 
 	public int[][] getLocations(int i) {
